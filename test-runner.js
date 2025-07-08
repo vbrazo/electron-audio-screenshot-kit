@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 // ============================================================================
-// SIMPLE TEST RUNNER FOR electron-platform-audio-screenshot
+// SIMPLE TEST RUNNER FOR electron-audio-screenshot
 // ============================================================================
 // This script runs basic tests to verify the library works correctly
 
 const fs = require('fs');
 const path = require('path');
 
-console.log('🧪 Running electron-platform-audio-screenshot tests...\n');
+console.log('🧪 Running electron-audio-screenshot tests...\n');
 
 // Test results tracking
 const testResults = {
@@ -84,9 +84,9 @@ runTest('Constants file exists', () => {
 });
 
 runTest('Main service exists', () => {
-  const servicePath = path.join(__dirname, 'src', 'main', 'platformAudioScreenshotService.ts');
+  const servicePath = path.join(__dirname, 'src', 'main', 'audioScreenshotService.ts');
   if (!fs.existsSync(servicePath)) {
-    throw new Error('main/platformAudioScreenshotService.ts not found');
+    throw new Error('main/audioScreenshotService.ts not found');
   }
 });
 
@@ -114,8 +114,8 @@ runTest('Package.json has correct structure', () => {
     }
   });
   
-  if (packageJson.name !== 'electron-platform-audio-screenshot') {
-    throw new Error('Package name should be "electron-platform-audio-screenshot"');
+  if (packageJson.name !== 'electron-audio-screenshot') {
+    throw new Error('Package name should be "electron-audio-screenshot"');
   }
 });
 
@@ -137,7 +137,7 @@ runTest('Main index exports required items', () => {
   const indexContent = fs.readFileSync(indexPath, 'utf8');
   
   const requiredExports = [
-    'platformAudioScreenshotService',
+    'audioScreenshotService',
     'AudioCaptureConfig',
     'PermissionStatus',
     'Platform'
@@ -180,11 +180,11 @@ console.log('\n🔗 Testing integration capabilities...');
 runTest('Can simulate Contextor integration', () => {
   // Simulate the integration code structure
   const integrationCode = `
-import { platformAudioScreenshotService } from 'electron-platform-audio-screenshot';
+import { audioScreenshotService } from 'electron-audio-screenshot';
 
 class ContextorApp {
   constructor() {
-    this.platformAudioScreenshotService = new platformAudioScreenshotService({
+    this.audioScreenshotService = new audioScreenshotService({
       sampleRate: 24000,
       chunkDuration: 0.1,
       enableEchoCancellation: true,
@@ -192,13 +192,13 @@ class ContextorApp {
   }
   
   setupIpcHandlers() {
-    this.platformAudioScreenshotService.setupIpcHandlers();
+    this.audioScreenshotService.setupIpcHandlers();
   }
 }
   `;
   
   // Check that the integration code structure is valid
-  if (!integrationCode.includes('platformAudioScreenshotService')) {
+  if (!integrationCode.includes('audioScreenshotService')) {
     throw new Error('Integration code structure is invalid');
   }
 });
@@ -206,7 +206,7 @@ class ContextorApp {
 runTest('Can simulate React component usage', () => {
   // Simulate React component usage
   const reactCode = `
-import { PlatformPermissionChecker, AudioCaptureUI } from 'electron-platform-audio-screenshot';
+import { PlatformPermissionChecker, AudioCaptureUI } from 'electron-audio-screenshot';
 
 function App() {
   return (
@@ -244,7 +244,7 @@ if (testResults.failed > 0) {
   process.exit(1);
 } else {
   console.log('\n✅ All tests passed! The library is ready for use.');
-  console.log('\n🎉 electron-platform-audio-screenshot library validation complete!');
+  console.log('\n🎉 electron-audio-screenshot library validation complete!');
   console.log('\nNext steps:');
   console.log('1. Run: npm run build');
   console.log('2. Run: npm test (if Jest is configured)');

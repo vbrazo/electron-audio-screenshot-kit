@@ -1,7 +1,7 @@
 // ============================================================================
 // INTEGRATION TESTS FOR CONTEXTOR
 // ============================================================================
-// These tests verify the integration between electron-platform-audio-screenshot and Contextor
+// These tests verify the integration between electron-audio-screenshot and Contextor
 
 const assert = require('assert');
 const path = require('path');
@@ -25,7 +25,7 @@ const mockElectron = {
 jest.mock('electron', () => mockElectron);
 
 describe('Contextor Integration Tests', () => {
-  let platformAudioScreenshotService;
+  let audioScreenshotService;
   let mockSpawn;
   let mockFs;
 
@@ -62,7 +62,7 @@ describe('Contextor Integration Tests', () => {
     });
 
     // Import the service after mocking
-    platformAudioScreenshotService = require('../src/main/platformAudioScreenshotService').platformAudioScreenshotService;
+    audioScreenshotService = require('../src/main/audioScreenshotService').audioScreenshotService;
     mockSpawn = require('child_process').spawn;
     mockFs = require('fs');
   });
@@ -80,19 +80,19 @@ describe('Contextor Integration Tests', () => {
   describe('Platform Detection', () => {
     it('should detect macOS correctly', () => {
       Object.defineProperty(process, 'platform', { value: 'darwin' });
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       assert.strictEqual(service.getPlatform(), 'macos');
     });
 
     it('should detect Windows correctly', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       assert.strictEqual(service.getPlatform(), 'windows');
     });
 
     it('should detect Linux correctly', () => {
       Object.defineProperty(process, 'platform', { value: 'linux' });
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       assert.strictEqual(service.getPlatform(), 'linux');
     });
   });
@@ -102,7 +102,7 @@ describe('Contextor Integration Tests', () => {
       mockElectron.systemPreferences.getMediaAccessStatus.mockReturnValue('granted');
       mockElectron.desktopCapturer.getSources.mockResolvedValue([{ id: 'screen:0' }]);
 
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       const result = await service.checkSystemPermissions();
 
       assert.deepStrictEqual(result, {
@@ -114,7 +114,7 @@ describe('Contextor Integration Tests', () => {
 
     it('should handle Windows permissions correctly', async () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       const result = await service.checkSystemPermissions();
 
       assert.deepStrictEqual(result, {
@@ -126,7 +126,7 @@ describe('Contextor Integration Tests', () => {
 
     it('should handle Linux permissions correctly', async () => {
       Object.defineProperty(process, 'platform', { value: 'linux' });
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       const result = await service.checkSystemPermissions();
 
       assert.deepStrictEqual(result, {
@@ -149,7 +149,7 @@ describe('Contextor Integration Tests', () => {
         on: jest.fn(),
       });
 
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       const result = await service.startAudioCapture();
 
       assert.deepStrictEqual(result, { success: true });
@@ -158,7 +158,7 @@ describe('Contextor Integration Tests', () => {
 
     it('should start Windows audio capture', async () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       const result = await service.startAudioCapture();
 
       assert.deepStrictEqual(result, { success: true });
@@ -166,7 +166,7 @@ describe('Contextor Integration Tests', () => {
 
     it('should start Linux audio capture', async () => {
       Object.defineProperty(process, 'platform', { value: 'linux' });
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       const result = await service.startAudioCapture();
 
       assert.deepStrictEqual(result, { success: true });
@@ -179,7 +179,7 @@ describe('Contextor Integration Tests', () => {
       mockExecFile.mockResolvedValue({ stdout: '', stderr: '' });
       mockFs.promises.readFile.mockResolvedValue(Buffer.from('mock-screenshot'));
 
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       const result = await service.captureScreenshot({ quality: 'high' });
 
       assert.strictEqual(result.success, true);
@@ -200,7 +200,7 @@ describe('Contextor Integration Tests', () => {
         },
       ]);
 
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       const result = await service.captureScreenshot({ quality: 'medium' });
 
       assert.strictEqual(result.success, true);
@@ -210,7 +210,7 @@ describe('Contextor Integration Tests', () => {
 
   describe('Configuration Management', () => {
     it('should update configuration correctly', () => {
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       const newConfig = {
         sampleRate: 48000,
         echoCancellationSensitivity: 'high',
@@ -224,7 +224,7 @@ describe('Contextor Integration Tests', () => {
     });
 
     it('should get current configuration', () => {
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       const config = service.getConfig();
 
       assert(config);
@@ -236,7 +236,7 @@ describe('Contextor Integration Tests', () => {
 
   describe('IPC Handlers', () => {
     it('should register all IPC handlers', () => {
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       service.setupIpcHandlers();
 
       const expectedHandlers = [
@@ -263,7 +263,7 @@ describe('Contextor Integration Tests', () => {
       mockElectron.desktopCapturer.getSources.mockResolvedValue([{ id: 'screen:0' }]);
       mockFs.existsSync.mockReturnValue(false);
 
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       
       try {
         await service.startAudioCapture();
@@ -277,7 +277,7 @@ describe('Contextor Integration Tests', () => {
       mockElectron.systemPreferences.getMediaAccessStatus.mockReturnValue('denied');
       mockElectron.desktopCapturer.getSources.mockRejectedValue(new Error('Permission denied'));
 
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       
       try {
         await service.startAudioCapture();
@@ -296,12 +296,12 @@ describe('Contextor Integration Tests', () => {
 describe('Contextor Specific Integration', () => {
   it('should integrate with Contextor main process', () => {
     // Test that the service can be imported and used in Contextor
-    const { platformAudioScreenshotService } = require('../src/main/platformAudioScreenshotService');
+    const { audioScreenshotService } = require('../src/main/audioScreenshotService');
     
     // Simulate Contextor main process integration
     class ContextorApp {
       constructor() {
-        this.platformAudioScreenshotService = new platformAudioScreenshotService({
+        this.audioScreenshotService = new audioScreenshotService({
           sampleRate: 24000,
           chunkDuration: 0.1,
           enableEchoCancellation: true,
@@ -310,20 +310,20 @@ describe('Contextor Specific Integration', () => {
       }
 
       setupIpcHandlers() {
-        this.platformAudioScreenshotService.setupIpcHandlers();
+        this.audioScreenshotService.setupIpcHandlers();
       }
     }
 
     const app = new ContextorApp();
     app.setupIpcHandlers();
 
-    assert(app.platformAudioScreenshotService);
-    assert.strictEqual(typeof app.platformAudioScreenshotService.getPlatform, 'function');
-    assert.strictEqual(typeof app.platformAudioScreenshotService.getConfig, 'function');
+    assert(app.audioScreenshotService);
+    assert.strictEqual(typeof app.audioScreenshotService.getPlatform, 'function');
+    assert.strictEqual(typeof app.audioScreenshotService.getConfig, 'function');
   });
 
   it('should handle Contextor audio recording workflow', async () => {
-    const { platformAudioScreenshotService } = require('../src/main/platformAudioScreenshotService');
+    const { audioScreenshotService } = require('../src/main/audioScreenshotService');
     
     // Mock successful permissions and capture
     mockElectron.systemPreferences.getMediaAccessStatus.mockReturnValue('granted');
@@ -337,7 +337,7 @@ describe('Contextor Specific Integration', () => {
       kill: jest.fn(),
     });
 
-    const service = new platformAudioScreenshotService();
+    const service = new audioScreenshotService();
 
     // Simulate Contextor conversation recording workflow
     const startResult = await service.startAudioCapture();
@@ -349,13 +349,13 @@ describe('Contextor Specific Integration', () => {
   });
 
   it('should handle Contextor screenshot capture', async () => {
-    const { platformAudioScreenshotService } = require('../src/main/platformAudioScreenshotService');
+    const { audioScreenshotService } = require('../src/main/audioScreenshotService');
     
     const mockExecFile = require('child_process').execFile;
     mockExecFile.mockResolvedValue({ stdout: '', stderr: '' });
     mockFs.promises.readFile.mockResolvedValue(Buffer.from('mock-screenshot'));
 
-    const service = new platformAudioScreenshotService();
+    const service = new audioScreenshotService();
 
     // Simulate Contextor context screenshot capture
     const result = await service.captureScreenshot({ 
@@ -384,8 +384,8 @@ describe('Platform Compatibility', () => {
       });
 
       it(`should initialize on ${platform}`, () => {
-        const { platformAudioScreenshotService } = require('../src/main/platformAudioScreenshotService');
-        const service = new platformAudioScreenshotService();
+        const { audioScreenshotService } = require('../src/main/audioScreenshotService');
+        const service = new audioScreenshotService();
         
         assert(service);
         assert.strictEqual(typeof service.getPlatform, 'function');
@@ -393,8 +393,8 @@ describe('Platform Compatibility', () => {
       });
 
       it(`should check permissions on ${platform}`, async () => {
-        const { platformAudioScreenshotService } = require('../src/main/platformAudioScreenshotService');
-        const service = new platformAudioScreenshotService();
+        const { audioScreenshotService } = require('../src/main/audioScreenshotService');
+        const service = new audioScreenshotService();
         
         const result = await service.checkSystemPermissions();
         
@@ -405,8 +405,8 @@ describe('Platform Compatibility', () => {
       });
 
       it(`should get configuration on ${platform}`, () => {
-        const { platformAudioScreenshotService } = require('../src/main/platformAudioScreenshotService');
-        const service = new platformAudioScreenshotService();
+        const { audioScreenshotService } = require('../src/main/audioScreenshotService');
+        const service = new audioScreenshotService();
         
         const config = service.getConfig();
         

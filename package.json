@@ -1,5 +1,5 @@
 {
-  "name": "electron-platform-audio-screenshot",
+  "name": "electron-audio-screenshot",
   "version": "1.0.0",
   "description": "Cross-platform audio capture for Electron apps with platform-specific permission handling",
   "main": "dist/index.js",
@@ -40,17 +40,17 @@
   ],
   "author": {
     "name": "Electron Platform Audio Team",
-    "email": "support@electron-platform-audio-screenshot.com"
+    "email": "support@electron-audio-screenshot.com"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/electron-platform-audio-screenshot/electron-platform-audio-screenshot.git"
+    "url": "https://github.com/vbrazo/electron-audio-screenshot.git"
   },
   "bugs": {
-    "url": "https://github.com/electron-platform-audio-screenshot/electron-platform-audio-screenshot/issues"
+    "url": "https://github.com/electron-audio-screenshot/electron-audio-screenshot/issues"
   },
-  "homepage": "https://github.com/electron-platform-audio-screenshot/electron-platform-audio-screenshot#readme",
+  "homepage": "https://github.com/electron-audio-screenshot/electron-audio-screenshot#readme",
   "peerDependencies": {
     "electron": ">=20.0.0"
   },

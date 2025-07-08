@@ -1,4 +1,4 @@
-import { platformAudioScreenshotService } from '../main/platformAudioScreenshotService';
+import { audioScreenshotService } from '../main/audioScreenshotService';
 import { AudioCaptureConfig, PermissionStatus, Platform } from '../types';
 import { AUDIO_CONFIGS, PLATFORMS } from '../constants';
 
@@ -51,8 +51,8 @@ jest.mock('sharp', () => {
   }));
 });
 
-describe('platformAudioScreenshotService', () => {
-  let platformAudioScreenshotService: platformAudioScreenshotService;
+describe('audioScreenshotService', () => {
+  let audioScreenshotService: audioScreenshotService;
   let mockSpawn: jest.Mocked<any>;
   let mockFs: jest.Mocked<any>;
   let mockPath: jest.Mocked<any>;
@@ -75,13 +75,13 @@ describe('platformAudioScreenshotService', () => {
       writable: true,
     });
 
-    platformAudioScreenshotService = new platformAudioScreenshotService();
+    audioScreenshotService = new audioScreenshotService();
   });
 
   describe('Constructor', () => {
     it('should initialize with default config for macOS', () => {
-      expect(platformAudioScreenshotService.getPlatform()).toBe(PLATFORMS.MACOS);
-      expect(platformAudioScreenshotService.getConfig()).toEqual(AUDIO_CONFIGS.macos);
+      expect(audioScreenshotService.getPlatform()).toBe(PLATFORMS.MACOS);
+      expect(audioScreenshotService.getConfig()).toEqual(AUDIO_CONFIGS.macos);
     });
 
     it('should initialize with custom config', () => {
@@ -90,7 +90,7 @@ describe('platformAudioScreenshotService', () => {
         chunkDuration: 0.05,
       };
 
-      const service = new platformAudioScreenshotService(customConfig);
+      const service = new audioScreenshotService(customConfig);
       const config = service.getConfig();
 
       expect(config.sampleRate).toBe(48000);
@@ -100,13 +100,13 @@ describe('platformAudioScreenshotService', () => {
 
     it('should detect Windows platform correctly', () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       expect(service.getPlatform()).toBe(PLATFORMS.WINDOWS);
     });
 
     it('should detect Linux platform correctly', () => {
       Object.defineProperty(process, 'platform', { value: 'linux' });
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       expect(service.getPlatform()).toBe(PLATFORMS.LINUX);
     });
   });
@@ -118,7 +118,7 @@ describe('platformAudioScreenshotService', () => {
       systemPreferences.getMediaAccessStatus.mockReturnValue('granted');
       desktopCapturer.getSources.mockResolvedValue([{ id: 'screen:0' }]);
 
-      const result = await platformAudioScreenshotService.checkSystemPermissions();
+      const result = await audioScreenshotService.checkSystemPermissions();
 
       expect(result).toEqual({
         microphone: 'granted',
@@ -133,7 +133,7 @@ describe('platformAudioScreenshotService', () => {
       systemPreferences.getMediaAccessStatus.mockReturnValue('denied');
       desktopCapturer.getSources.mockRejectedValue(new Error('Permission denied'));
 
-      const result = await platformAudioScreenshotService.checkSystemPermissions();
+      const result = await audioScreenshotService.checkSystemPermissions();
 
       expect(result).toEqual({
         microphone: 'denied',
@@ -144,7 +144,7 @@ describe('platformAudioScreenshotService', () => {
 
     it('should handle Windows permissions', async () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
 
       const result = await service.checkSystemPermissions();
 
@@ -157,7 +157,7 @@ describe('platformAudioScreenshotService', () => {
 
     it('should handle Linux permissions', async () => {
       Object.defineProperty(process, 'platform', { value: 'linux' });
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
 
       const result = await service.checkSystemPermissions();
 
@@ -172,7 +172,7 @@ describe('platformAudioScreenshotService', () => {
   describe('requestMicrophonePermission', () => {
     it('should return granted for non-macOS platforms', async () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
 
       const result = await service.requestMicrophonePermission();
 
@@ -188,7 +188,7 @@ describe('platformAudioScreenshotService', () => {
       systemPreferences.getMediaAccessStatus.mockReturnValue('not-determined');
       systemPreferences.askForMediaAccess.mockResolvedValue(true);
 
-      const result = await platformAudioScreenshotService.requestMicrophonePermission();
+      const result = await audioScreenshotService.requestMicrophonePermission();
 
       expect(result).toEqual({
         success: true,
@@ -203,7 +203,7 @@ describe('platformAudioScreenshotService', () => {
       systemPreferences.getMediaAccessStatus.mockReturnValue('not-determined');
       systemPreferences.askForMediaAccess.mockResolvedValue(false);
 
-      const result = await platformAudioScreenshotService.requestMicrophonePermission();
+      const result = await audioScreenshotService.requestMicrophonePermission();
 
       expect(result).toEqual({
         success: false,
@@ -215,7 +215,7 @@ describe('platformAudioScreenshotService', () => {
   describe('openSystemPreferences', () => {
     it('should return error for non-macOS platforms', async () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
 
       const result = await service.openSystemPreferences('screen-recording');
 
@@ -230,7 +230,7 @@ describe('platformAudioScreenshotService', () => {
       
       desktopCapturer.getSources.mockRejectedValue(new Error('Expected failure'));
 
-      const result = await platformAudioScreenshotService.openSystemPreferences('screen-recording');
+      const result = await audioScreenshotService.openSystemPreferences('screen-recording');
 
       expect(result).toEqual({
         success: true,
@@ -256,7 +256,7 @@ describe('platformAudioScreenshotService', () => {
         on: jest.fn(),
       });
 
-      const result = await platformAudioScreenshotService.startAudioCapture();
+      const result = await audioScreenshotService.startAudioCapture();
 
       expect(result).toEqual({ success: true });
       expect(mockSpawn).toHaveBeenCalled();
@@ -269,7 +269,7 @@ describe('platformAudioScreenshotService', () => {
       desktopCapturer.getSources.mockResolvedValue([{ id: 'screen:0' }]);
       mockFs.existsSync.mockReturnValue(false);
 
-      await expect(platformAudioScreenshotService.startAudioCapture()).rejects.toThrow(
+      await expect(audioScreenshotService.startAudioCapture()).rejects.toThrow(
         'SystemAudioDump binary not found'
       );
     });
@@ -280,14 +280,14 @@ describe('platformAudioScreenshotService', () => {
       systemPreferences.getMediaAccessStatus.mockReturnValue('denied');
       desktopCapturer.getSources.mockRejectedValue(new Error('Permission denied'));
 
-      await expect(platformAudioScreenshotService.startAudioCapture()).rejects.toThrow(
+      await expect(audioScreenshotService.startAudioCapture()).rejects.toThrow(
         'System permissions need to be configured'
       );
     });
 
     it('should start Windows audio capture', async () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
 
       const result = await service.startAudioCapture();
 
@@ -296,7 +296,7 @@ describe('platformAudioScreenshotService', () => {
 
     it('should start Linux audio capture', async () => {
       Object.defineProperty(process, 'platform', { value: 'linux' });
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
 
       const result = await service.startAudioCapture();
 
@@ -319,14 +319,14 @@ describe('platformAudioScreenshotService', () => {
         kill: jest.fn(),
       });
 
-      await platformAudioScreenshotService.startAudioCapture();
-      const result = await platformAudioScreenshotService.stopAudioCapture();
+      await audioScreenshotService.startAudioCapture();
+      const result = await audioScreenshotService.stopAudioCapture();
 
       expect(result.success).toBe(true);
     });
 
     it('should return success when not capturing', async () => {
-      const result = await platformAudioScreenshotService.stopAudioCapture();
+      const result = await audioScreenshotService.stopAudioCapture();
 
       expect(result).toEqual({ success: true });
     });
@@ -337,7 +337,7 @@ describe('platformAudioScreenshotService', () => {
       mockExecFile.mockResolvedValue({ stdout: '', stderr: '' });
       mockFs.promises.readFile.mockResolvedValue(Buffer.from('mock-screenshot'));
 
-      const result = await platformAudioScreenshotService.captureScreenshot({ quality: 'high' });
+      const result = await audioScreenshotService.captureScreenshot({ quality: 'high' });
 
       expect(result.success).toBe(true);
       expect(result.base64).toBeDefined();
@@ -347,7 +347,7 @@ describe('platformAudioScreenshotService', () => {
 
     it('should capture cross-platform screenshot', async () => {
       Object.defineProperty(process, 'platform', { value: 'win32' });
-      const service = new platformAudioScreenshotService();
+      const service = new audioScreenshotService();
       
       const { desktopCapturer } = require('electron');
       desktopCapturer.getSources.mockResolvedValue([
@@ -369,7 +369,7 @@ describe('platformAudioScreenshotService', () => {
     it('should handle screenshot capture errors', async () => {
       mockExecFile.mockRejectedValue(new Error('Screenshot failed'));
 
-      const result = await platformAudioScreenshotService.captureScreenshot();
+      const result = await audioScreenshotService.captureScreenshot();
 
       expect(result.success).toBe(false);
       expect(result.error).toBe('Screenshot failed');
@@ -383,15 +383,15 @@ describe('platformAudioScreenshotService', () => {
         echoCancellationSensitivity: 'high',
       };
 
-      platformAudioScreenshotService.updateConfig(newConfig);
-      const config = platformAudioScreenshotService.getConfig();
+      audioScreenshotService.updateConfig(newConfig);
+      const config = audioScreenshotService.getConfig();
 
       expect(config.sampleRate).toBe(48000);
       expect(config.echoCancellationSensitivity).toBe('high');
     });
 
     it('should get current configuration', () => {
-      const config = platformAudioScreenshotService.getConfig();
+      const config = audioScreenshotService.getConfig();
 
       expect(config).toEqual(AUDIO_CONFIGS.macos);
     });
@@ -401,7 +401,7 @@ describe('platformAudioScreenshotService', () => {
     it('should register all IPC handlers', () => {
       const { ipcMain } = require('electron');
 
-      platformAudioScreenshotService.setupIpcHandlers();
+      audioScreenshotService.setupIpcHandlers();
 
       expect(ipcMain.handle).toHaveBeenCalledWith(
         'platform-audio:check-permissions',
@@ -452,7 +452,7 @@ describe('platformAudioScreenshotService', () => {
       stereoBuffer.writeInt16LE(250, 6); // Right channel sample 2
 
       // Access private method for testing
-      const service = platformAudioScreenshotService as any;
+      const service = audioScreenshotService as any;
       const monoBuffer = service.convertStereoToMono(stereoBuffer);
 
       expect(monoBuffer.length).toBe(4); // 2 samples * 1 channel * 2 bytes

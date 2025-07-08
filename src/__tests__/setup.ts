@@ -1,14 +1,14 @@
-// Jest setup file for electron-platform-audio-screenshot tests
+// Jest setup file for electron-audio-screenshot tests
 
 // Global test setup
 beforeAll(() => {
   // Set up any global test configuration
-  console.log('Setting up electron-platform-audio-screenshot tests...');
+  console.log('Setting up electron-audio-screenshot tests...');
 });
 
 afterAll(() => {
   // Clean up any global test resources
-  console.log('Cleaning up electron-platform-audio-screenshot tests...');
+  console.log('Cleaning up electron-audio-screenshot tests...');
 });
 
 // Mock global objects that might not exist in test environment

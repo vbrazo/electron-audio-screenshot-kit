@@ -1,14 +1,14 @@
 // ============================================================================
 // GENERIC INTEGRATION TESTS
 // ============================================================================
-// These tests verify that electron-platform-audio-screenshot integrates correctly with any Electron app
+// These tests verify that electron-audio-screenshot integrates correctly with any Electron app
 
 const fs = require('fs');
 const path = require('path');
 
 // Test configuration
 const TEST_CONFIG = {
-  packageName: 'electron-platform-audio-screenshot',
+  packageName: 'electron-audio-screenshot',
   version: '1.0.0',
   requiredFiles: [
     'dist/index.js',
@@ -17,7 +17,7 @@ const TEST_CONFIG = {
     'LICENSE'
   ],
   requiredExports: [
-    'platformAudioScreenshotService',
+    'audioScreenshotService',
     'PlatformAudioCapture', 
     'PlatformPermissionChecker',
     'AudioCaptureUI'
@@ -145,10 +145,10 @@ function testBuildOutput() {
   const mainJsPath = path.join(distPath, 'index.js');
   if (fs.existsSync(mainJsPath)) {
     const content = fs.readFileSync(mainJsPath, 'utf8');
-    if (content.includes('platformAudioScreenshotService')) {
+    if (content.includes('audioScreenshotService')) {
       addTestResult('Main JS file contains exports', true);
     } else {
-      addTestResult('Main JS file contains exports', false, 'platformAudioScreenshotService not found in main.js');
+      addTestResult('Main JS file contains exports', false, 'audioScreenshotService not found in main.js');
     }
   } else {
     addTestResult('Main JS file exists', false, 'index.js not found in dist');
@@ -179,7 +179,7 @@ function testDocumentation() {
     
     // Check for key sections
     const requiredSections = [
-      '# electron-platform-audio-screenshot',
+      '# electron-audio-screenshot',
       '## Installation',
       '## Usage',
       '## API Reference',
@@ -202,7 +202,7 @@ function testDocumentation() {
     }
     
     // Check for usage examples
-    if (content.includes('import') && content.includes('platformAudioScreenshotService')) {
+    if (content.includes('import') && content.includes('audioScreenshotService')) {
       addTestResult('README contains usage examples', true);
     } else {
       addTestResult('README contains usage examples', false, 'Import examples not found');
@@ -247,14 +247,14 @@ function testIntegrationScenarios() {
   
   // Test 1: Basic Electron app integration
   const basicIntegration = `
-import { platformAudioScreenshotService } from 'electron-platform-audio-screenshot';
+import { audioScreenshotService } from 'electron-audio-screenshot';
 import { app, ipcMain } from 'electron';
 
 class MyApp {
-  private platformAudioScreenshotService: platformAudioScreenshotService;
+  private audioScreenshotService: audioScreenshotService;
 
   constructor() {
-    this.platformAudioScreenshotService = new platformAudioScreenshotService({
+    this.audioScreenshotService = new audioScreenshotService({
       sampleRate: 24000,
       chunkDuration: 0.1,
       enableEchoCancellation: true,
@@ -262,13 +262,13 @@ class MyApp {
   }
 
   setupIpcHandlers() {
-    this.platformAudioScreenshotService.setupIpcHandlers();
+    this.audioScreenshotService.setupIpcHandlers();
   }
 }
 `;
   
   // Check if the integration code would work (basic syntax check)
-  if (basicIntegration.includes('platformAudioScreenshotService') && 
+  if (basicIntegration.includes('audioScreenshotService') && 
       basicIntegration.includes('setupIpcHandlers')) {
     addTestResult('Basic integration scenario', true);
   } else {
@@ -278,7 +278,7 @@ class MyApp {
   // Test 2: React component integration
   const reactIntegration = `
 import React, { useState } from 'react';
-import { PlatformAudioCapture, PlatformPermissionChecker } from 'electron-platform-audio-screenshot';
+import { PlatformAudioCapture, PlatformPermissionChecker } from 'electron-audio-screenshot';
 
 export function AudioRecorder() {
   const [isRecording, setIsRecording] = useState(false);

@@ -1,9 +1,9 @@
 // ============================================================================
 // GENERIC ELECTRON APP INTEGRATION EXAMPLE
 // ============================================================================
-// This example shows how to integrate electron-platform-audio-screenshot into any Electron app
+// This example shows how to integrate electron-audio-screenshot into any Electron app
 
-import { platformAudioScreenshotService } from 'electron-platform-audio-screenshot';
+import { audioScreenshotService } from 'electron-audio-screenshot';
 import { app, ipcMain } from 'electron';
 
 // ============================================================================
@@ -11,11 +11,11 @@ import { app, ipcMain } from 'electron';
 // ============================================================================
 
 class GenericAudioIntegration {
-  private platformAudioScreenshotService: platformAudioScreenshotService;
+  private audioScreenshotService: audioScreenshotService;
 
   constructor() {
     // Initialize with your app's configuration
-    this.platformAudioScreenshotService = new platformAudioScreenshotService({
+    this.audioScreenshotService = new audioScreenshotService({
       sampleRate: 24000,
       chunkDuration: 0.1,
       enableEchoCancellation: true,
@@ -28,14 +28,14 @@ class GenericAudioIntegration {
 
   private setupIpcHandlers(): void {
     // Register standard platform audio handlers
-    this.platformAudioScreenshotService.setupIpcHandlers();
+    this.audioScreenshotService.setupIpcHandlers();
   }
 
   private setupAppSpecificHandlers(): void {
     // Your app-specific audio handling
     ipcMain.handle('app:start-audio-recording', async () => {
       try {
-        const result = await this.platformAudioScreenshotService.startAudioCapture();
+        const result = await this.audioScreenshotService.startAudioCapture();
         return result;
       } catch (error) {
         console.error('Failed to start audio recording:', error);
@@ -45,7 +45,7 @@ class GenericAudioIntegration {
 
     ipcMain.handle('app:stop-audio-recording', async () => {
       try {
-        const result = await this.platformAudioScreenshotService.stopAudioCapture();
+        const result = await this.audioScreenshotService.stopAudioCapture();
         return result;
       } catch (error) {
         console.error('Failed to stop audio recording:', error);
@@ -55,7 +55,7 @@ class GenericAudioIntegration {
 
     ipcMain.handle('app:capture-screenshot', async (event, options) => {
       try {
-        const result = await this.platformAudioScreenshotService.captureScreenshot(options);
+        const result = await this.audioScreenshotService.captureScreenshot(options);
         return result;
       } catch (error) {
         console.error('Failed to capture screenshot:', error);
@@ -69,7 +69,7 @@ class GenericAudioIntegration {
 // RENDERER PROCESS INTEGRATION
 // ============================================================================
 
-import { PlatformAudioCapture, PlatformPermissionChecker } from 'electron-platform-audio-screenshot';
+import { PlatformAudioCapture, PlatformPermissionChecker } from 'electron-audio-screenshot';
 
 // Generic audio capture class (for non-React apps)
 export class GenericAudioCapture {
@@ -176,7 +176,7 @@ Add to your package.json:
 
 {
   "dependencies": {
-    "electron-platform-audio-screenshot": "^1.0.0",
+    "electron-audio-screenshot": "^1.0.0",
     "sharp": "^0.34.2"
   },
   "peerDependencies": {
@@ -213,7 +213,7 @@ export function basicUsageExample() {
 /*
 // In your React component file (e.g., AudioRecorder.tsx):
 import React, { useState, useEffect } from 'react';
-import { PlatformAudioCapture, PlatformPermissionChecker } from 'electron-platform-audio-screenshot';
+import { PlatformAudioCapture, PlatformPermissionChecker } from 'electron-audio-screenshot';
 
 export function AudioRecorder() {
   const [isRecording, setIsRecording] = useState(false);

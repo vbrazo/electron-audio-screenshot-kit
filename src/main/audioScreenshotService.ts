@@ -33,7 +33,7 @@ const execFileAsync = promisify(execFile);
 // PLATFORM AUDIO SERVICE (MAIN PROCESS)
 // ============================================================================
 
-export class platformAudioScreenshotService {
+export class audioScreenshotService {
   private isCapturing: boolean = false;
   private systemAudioProc: any = null;
   private audioChunks: AudioChunk[] = [];
@@ -50,7 +50,7 @@ export class platformAudioScreenshotService {
     this.platform = this.detectPlatform();
     this.config = { ...AUDIO_CONFIGS[this.platform], ...config };
     
-    console.log(`${LOG_PREFIXES.MAIN} platformAudioScreenshotService initialized for ${this.platform}`);
+    console.log(`${LOG_PREFIXES.MAIN} audioScreenshotService initialized for ${this.platform}`);
   }
 
   // ============================================================================
