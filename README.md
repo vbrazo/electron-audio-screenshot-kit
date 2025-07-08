@@ -217,7 +217,7 @@ await audioCapture.captureManualScreenshot('high');
 ## 🤝 Contributing
 
 ```bash
-git clone https://github.com/you/electron-platform-audio
+git clone https://github.com/vbrazo/electron-platform-audio
 cd electron-platform-audio
 npm install
 npm run build
@@ -230,7 +230,7 @@ npm test
 
 ## 📄 License
 
-MIT © [Your Name / Org]
+MIT © Vitor Oliveira
 
 ---
 
@@ -246,9 +246,9 @@ MIT © [Your Name / Org]
 
 ## 🆘 Support
 
-- [GitHub Issues](https://github.com/you/electron-platform-audio/issues)
-- [Discussions](https://github.com/you/electron-platform-audio/discussions)
-- [Wiki](https://github.com/you/electron-platform-audio/wiki)
+- [GitHub Issues](https://github.com/vbrazo/electron-platform-audio/issues)
+- [Discussions](https://github.com/vbrazo/electron-platform-audio/discussions)
+- [Wiki](https://github.com/vbrazo/electron-platform-audio/wiki)
 
 ---
 
