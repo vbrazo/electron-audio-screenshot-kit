@@ -1,6 +1,6 @@
-# Publishing Guide for electron-audio-screenshot-kit
+# Publishing Guide for electron-audio-shot
 
-This guide explains how to publish the `electron-audio-screenshot-kit` npm package.
+This guide explains how to publish the `electron-audio-shot` npm package.
 
 ## 📋 Prerequisites
 
@@ -14,7 +14,7 @@ This guide explains how to publish the `electron-audio-screenshot-kit` npm packa
 
 ```bash
 # Navigate to the package directory
-cd electron-audio-screenshot-kit
+cd electron-audio-shot
 
 # Install dependencies
 npm install
@@ -62,10 +62,10 @@ npm publish --tag beta
 
 ```bash
 # Check the published package
-npm view electron-audio-screenshot-kit
+npm view electron-audio-shot
 
 # Install and test locally
-npm install electron-audio-screenshot-kit@latest
+npm install electron-audio-shot@latest
 ```
 
 ## 📦 Package Structure
@@ -73,7 +73,7 @@ npm install electron-audio-screenshot-kit@latest
 The published package should include:
 
 ```
-electron-audio-screenshot-kit/
+electron-audio-shot/
 ├── dist/                    # Compiled TypeScript
 ├── assets/                  # Binary files (SystemAudioDump)
 ├── README.md               # Documentation
@@ -203,7 +203,7 @@ npm pack
 
 # Install in a test project
 cd ../test-project
-npm install ../electron-audio-screenshot-kit/contextor-electron-audio-screenshot-kit-1.0.0.tgz
+npm install ../electron-audio-shot/contextor-electron-audio-shot-1.0.0.tgz
 
 # Test the integration
 npm test
@@ -224,10 +224,10 @@ Test with:
 
 ```bash
 # Check download statistics
-npm stats electron-audio-screenshot-kit
+npm stats electron-audio-shot
 
 # Monitor for issues
-npm bugs electron-audio-screenshot-kit
+npm bugs electron-audio-shot
 ```
 
 ### Update Documentation
@@ -241,8 +241,8 @@ npm bugs electron-audio-screenshot-kit
 ### Common Issues
 
 **"Package name already exists"**
-- Check if the name is available: `npm search electron-audio-screenshot-kit`
-- Consider scoped package: `@contextor/electron-audio-screenshot-kit`
+- Check if the name is available: `npm search electron-audio-shot`
+- Consider scoped package: `@contextor/electron-audio-shot`
 
 **"Build fails"**
 - Check TypeScript errors: `npm run build`
@@ -258,10 +258,10 @@ npm bugs electron-audio-screenshot-kit
 
 ```bash
 # Unpublish (within 72 hours)
-npm unpublish electron-audio-screenshot-kit@1.0.0
+npm unpublish electron-audio-shot@1.0.0
 
 # Or deprecate
-npm deprecate electron-audio-screenshot-kit@1.0.0 "Use v1.0.1 instead"
+npm deprecate electron-audio-shot@1.0.0 "Use v1.0.1 instead"
 ```
 
 ## 📞 Support

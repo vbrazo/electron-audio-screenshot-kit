@@ -1,9 +1,9 @@
 beforeAll(() => {
-  console.log('Setting up electron-audio-screenshot-kit tests...');
+  console.log('Setting up electron-audio-shot tests...');
 });
 
 afterAll(() => {
-  console.log('Cleaning up electron-audio-screenshot-kit tests...');
+  console.log('Cleaning up electron-audio-shot tests...');
 });
 
 global.console = {

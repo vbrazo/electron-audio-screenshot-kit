@@ -1,5 +1,5 @@
 {
-  "name": "electron-audio-screenshot-kit",
+  "name": "electron-audio-shot",
   "version": "1.0.0",
   "description": "Cross-platform audio and screenshot capture for Electron apps with platform-specific permission handling",
   "main": "dist/index.js",
@@ -40,17 +40,17 @@
   ],
   "author": {
     "name": "Electron Platform Audio Team",
-    "email": "support@electron-audio-screenshot-kit.com"
+    "email": "support@electron-audio-shot.com"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vbrazo/electron-audio-screenshot-kit.git"
+    "url": "https://github.com/vbrazo/electron-audio-shot.git"
   },
   "bugs": {
-    "url": "https://github.com/electron-audio-screenshot-kit/electron-audio-screenshot-kit/issues"
+    "url": "https://github.com/electron-audio-shot/electron-audio-shot/issues"
   },
-  "homepage": "https://github.com/electron-audio-screenshot-kit/electron-audio-screenshot-kit#readme",
+  "homepage": "https://github.com/electron-audio-shot/electron-audio-shot#readme",
   "peerDependencies": {
     "electron": ">=20.0.0"
   },

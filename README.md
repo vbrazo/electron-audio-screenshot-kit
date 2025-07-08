@@ -1,6 +1,6 @@
-# electron-audio-screenshot-kit
+# electron-audio-shot
 
-[![npm version](https://img.shields.io/npm/v/electron-audio-screenshot-kit.svg)](https://www.npmjs.com/package/electron-audio-screenshot-kit)
+[![npm version](https://img.shields.io/npm/v/electron-audio-shot.svg)](https://www.npmjs.com/package/electron-audio-shot)
 
 A **completely generic, production-ready npm library** for Electron apps that enables cross-platform audio capture, permission handling, echo cancellation, and screenshot capture capabilities — with full TypeScript and React support.
 
@@ -28,7 +28,7 @@ A **universal, drop-in audio + screenshot solution** for any Electron app.
 ## 🛠️ Installation
 
 ```bash
-npm install electron-audio-screenshot-kit
+npm install electron-audio-shot
 ```
 
 > ⚠️ Requires `electron >= 20.0.0` as a peer dependency.
@@ -38,7 +38,7 @@ npm install electron-audio-screenshot-kit
 ## 🏗️ Architecture
 
 ```
-electron-audio-screenshot-kit/
+electron-audio-shot/
 ├── src/
 │   ├── main/                    # Main process services
 │   ├── renderer/                # Renderer process services
@@ -71,7 +71,7 @@ electron-audio-screenshot-kit/
 ### Main Process
 
 ```ts
-import { audioScreenshotService } from 'electron-audio-screenshot-kit';
+import { audioScreenshotService } from 'electron-audio-shot';
 
 const service = new audioScreenshotService({
   sampleRate: 24000,
@@ -85,7 +85,7 @@ service.setupIpcHandlers();
 ### Renderer Process
 
 ```ts
-import { PlatformAudioCapture } from 'electron-audio-screenshot-kit';
+import { PlatformAudioCapture } from 'electron-audio-shot';
 
 const audioCapture = new PlatformAudioCapture();
 await audioCapture.startCapture(5, 'medium');    // Start recording
@@ -101,7 +101,7 @@ import { useState } from 'react';
 import {
   PlatformAudioCapture,
   PlatformPermissionChecker
-} from 'electron-audio-screenshot-kit';
+} from 'electron-audio-shot';
 
 export function AudioRecorder() {
   const [isRecording, setIsRecording] = useState(false);
@@ -219,8 +219,8 @@ await audioCapture.captureManualScreenshot('high');
 ## 🤝 Contributing
 
 ```bash
-git clone https://github.com/vbrazo/electron-audio-screenshot-kit
-cd electron-audio-screenshot-kit
+git clone https://github.com/vbrazo/electron-audio-shot
+cd electron-audio-shot
 npm install
 npm run build
 npm test
@@ -248,8 +248,8 @@ MIT © Vitor Oliveira
 
 ## 🆘 Support
 
-- [GitHub Issues](https://github.com/vbrazo/electron-audio-screenshot-kit/issues)
-- [Wiki](https://github.com/vbrazo/electron-audio-screenshot-kit/wiki)
+- [GitHub Issues](https://github.com/vbrazo/electron-audio-shot/issues)
+- [Wiki](https://github.com/vbrazo/electron-audio-shot/wiki)
 
 ---
 
@@ -257,7 +257,7 @@ MIT © Vitor Oliveira
 
 ```json
 {
-  "name": "electron-audio-screenshot-kit",
+  "name": "electron-audio-shot",
   "version": "1.0.0",
   "description": "Cross-platform audio + screenshot for Electron",
   "main": "dist/index.js",

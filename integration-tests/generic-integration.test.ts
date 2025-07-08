@@ -32,7 +32,7 @@ interface PackageJson {
 }
 
 const TEST_CONFIG: TestConfig = {
-  packageName: 'electron-audio-screenshot-kit',
+  packageName: 'electron-audio-shot',
   version: '1.0.0',
   requiredFiles: [
     'dist/index.js',
@@ -191,7 +191,7 @@ function testDocumentation(): void {
     const content = fs.readFileSync(readmePath, 'utf8');
     
     const requiredSections: string[] = [
-      '# electron-audio-screenshot-kit',
+      '# electron-audio-shot',
       '## 🛠️ Installation',
       '## 🔧 Advanced Usage',
       '## 📚 API Reference'
@@ -251,7 +251,7 @@ function testIntegrationScenarios(): void {
   log('Testing integration scenarios...');
   
   const basicIntegration = `
-  import { audioScreenshotService } from 'electron-audio-screenshot-kit';
+  import { audioScreenshotService } from 'electron-audio-shot';
   import { app, ipcMain } from 'electron';
 
   class MyApp {
@@ -280,7 +280,7 @@ function testIntegrationScenarios(): void {
     
     const reactIntegration = `
     import React, { useState } from 'react';
-    import { PlatformAudioCapture, PlatformPermissionChecker } from 'electron-audio-screenshot-kit';
+    import { PlatformAudioCapture, PlatformPermissionChecker } from 'electron-audio-shot';
 
     interface AudioRecorderProps {
       onRecordingComplete?: (chunks: any[]) => void;
