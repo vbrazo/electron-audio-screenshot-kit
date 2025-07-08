@@ -2,7 +2,6 @@ import {
   AudioCaptureConfig, 
   AudioChunk, 
   PermissionStatus, 
-  Platform,
   PlatformAudioError,
   PermissionError,
   AudioDeviceError,

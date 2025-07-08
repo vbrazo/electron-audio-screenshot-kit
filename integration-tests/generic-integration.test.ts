@@ -1,14 +1,45 @@
 // ============================================================================
-// GENERIC INTEGRATION TESTS
+// GENERIC INTEGRATION TESTS (TypeScript)
 // ============================================================================
-// These tests verify that electron-audio-screenshot integrates correctly with any Electron app
+// These tests verify that electron-audio-screenshot-kit integrates correctly with any Electron app
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+
+// Types
+interface TestConfig {
+  packageName: string;
+  version: string;
+  requiredFiles: string[];
+  requiredExports: string[];
+}
+
+interface TestResult {
+  testName: string;
+  passed: boolean;
+  details: string;
+}
+
+interface TestResults {
+  passed: number;
+  failed: number;
+  total: number;
+  details: TestResult[];
+}
+
+interface PackageJson {
+  name?: string;
+  version?: string;
+  main?: string;
+  types?: string;
+  peerDependencies?: Record<string, string>;
+  os?: string[];
+  cpu?: string[];
+}
 
 // Test configuration
-const TEST_CONFIG = {
-  packageName: 'electron-audio-screenshot',
+const TEST_CONFIG: TestConfig = {
+  packageName: 'electron-audio-screenshot-kit',
   version: '1.0.0',
   requiredFiles: [
     'dist/index.js',
@@ -25,7 +56,7 @@ const TEST_CONFIG = {
 };
 
 // Test results
-let testResults = {
+let testResults: TestResults = {
   passed: 0,
   failed: 0,
   total: 0,
@@ -33,13 +64,13 @@ let testResults = {
 };
 
 // Utility functions
-function log(message, type = 'info') {
+function log(message: string, type: 'info' | 'error' | 'success' = 'info'): void {
   const timestamp = new Date().toISOString();
   const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️';
   console.log(`${prefix} [${timestamp}] ${message}`);
 }
 
-function addTestResult(testName, passed, details = '') {
+function addTestResult(testName: string, passed: boolean, details: string = ''): void {
   testResults.total++;
   if (passed) {
     testResults.passed++;
@@ -52,7 +83,7 @@ function addTestResult(testName, passed, details = '') {
 }
 
 // Test 1: Package structure validation
-function testPackageStructure() {
+function testPackageStructure(): boolean {
   log('Testing package structure...');
   
   const packagePath = path.join(__dirname, '..');
@@ -66,11 +97,13 @@ function testPackageStructure() {
   addTestResult('Package.json exists', true);
   
   // Parse package.json
-  let packageJson;
+  let packageJson: PackageJson;
   try {
-    packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+    const content = fs.readFileSync(packageJsonPath, 'utf8');
+    packageJson = JSON.parse(content) as PackageJson;
   } catch (error) {
-    addTestResult('Package.json is valid JSON', false, error.message);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    addTestResult('Package.json is valid JSON', false, errorMessage);
     return false;
   }
   addTestResult('Package.json is valid JSON', true);
@@ -104,7 +137,7 @@ function testPackageStructure() {
   }
   
   // Check peer dependencies
-  if (!packageJson.peerDependencies || !packageJson.peerDependencies.electron) {
+  if (!packageJson.peerDependencies?.['electron']) {
     addTestResult('Electron peer dependency', false, 'electron peer dependency missing');
   } else {
     addTestResult('Electron peer dependency', true);
@@ -114,7 +147,7 @@ function testPackageStructure() {
 }
 
 // Test 2: Required files validation
-function testRequiredFiles() {
+function testRequiredFiles(): void {
   log('Testing required files...');
   
   const packagePath = path.join(__dirname, '..');
@@ -130,7 +163,7 @@ function testRequiredFiles() {
 }
 
 // Test 3: Build output validation
-function testBuildOutput() {
+function testBuildOutput(): boolean {
   log('Testing build output...');
   
   const distPath = path.join(__dirname, '..', 'dist');
@@ -166,10 +199,12 @@ function testBuildOutput() {
   } else {
     addTestResult('TypeScript definitions exist', false, 'index.d.ts not found in dist');
   }
+  
+  return true;
 }
 
 // Test 4: Documentation validation
-function testDocumentation() {
+function testDocumentation(): void {
   log('Testing documentation...');
   
   const readmePath = path.join(__dirname, '..', 'README.md');
@@ -178,12 +213,11 @@ function testDocumentation() {
     const content = fs.readFileSync(readmePath, 'utf8');
     
     // Check for key sections
-    const requiredSections = [
-      '# electron-audio-screenshot',
-      '## Installation',
-      '## Usage',
-      '## API Reference',
-      '## Examples'
+    const requiredSections: string[] = [
+      '# electron-audio-screenshot-kit',
+      '## 🛠️ Installation',
+      '## 🔧 Advanced Usage',
+      '## 📚 API Reference'
     ];
     
     for (const section of requiredSections) {
@@ -213,7 +247,7 @@ function testDocumentation() {
 }
 
 // Test 5: Examples validation
-function testExamples() {
+function testExamples(): void {
   log('Testing examples...');
   
   const examplesPath = path.join(__dirname, '..', 'examples');
@@ -242,12 +276,12 @@ function testExamples() {
 }
 
 // Test 6: Integration scenarios
-function testIntegrationScenarios() {
+function testIntegrationScenarios(): void {
   log('Testing integration scenarios...');
   
   // Test 1: Basic Electron app integration
   const basicIntegration = `
-import { audioScreenshotService } from 'electron-audio-screenshot';
+import { audioScreenshotService } from 'electron-audio-screenshot-kit';
 import { app, ipcMain } from 'electron';
 
 class MyApp {
@@ -261,7 +295,7 @@ class MyApp {
     });
   }
 
-  setupIpcHandlers() {
+  setupIpcHandlers(): void {
     this.audioScreenshotService.setupIpcHandlers();
   }
 }
@@ -278,13 +312,17 @@ class MyApp {
   // Test 2: React component integration
   const reactIntegration = `
 import React, { useState } from 'react';
-import { PlatformAudioCapture, PlatformPermissionChecker } from 'electron-audio-screenshot';
+import { PlatformAudioCapture, PlatformPermissionChecker } from 'electron-audio-screenshot-kit';
 
-export function AudioRecorder() {
-  const [isRecording, setIsRecording] = useState(false);
+interface AudioRecorderProps {
+  onRecordingComplete?: (chunks: any[]) => void;
+}
+
+export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps): JSX.Element {
+  const [isRecording, setIsRecording] = useState<boolean>(false);
   const audioCapture = new PlatformAudioCapture();
   
-  const startRecording = async () => {
+  const startRecording = async (): Promise<void> => {
     const result = await audioCapture.startCapture(5, 'medium');
     if (result.success) {
       setIsRecording(true);
@@ -295,7 +333,7 @@ export function AudioRecorder() {
     <div>
       <PlatformPermissionChecker
         onPermissionsReady={() => console.log('Ready')}
-        onPermissionsError={(error) => console.error(error)}
+        onPermissionsError={(error: Error) => console.error(error)}
       />
       <button onClick={startRecording}>Start Recording</button>
     </div>
@@ -312,18 +350,19 @@ export function AudioRecorder() {
 }
 
 // Test 7: Platform support validation
-function testPlatformSupport() {
+function testPlatformSupport(): void {
   log('Testing platform support...');
   
   const packagePath = path.join(__dirname, '..', 'package.json');
   
   if (fs.existsSync(packagePath)) {
-    const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+    const content = fs.readFileSync(packagePath, 'utf8');
+    const packageJson = JSON.parse(content) as PackageJson;
     
     // Check supported operating systems
     if (packageJson.os && Array.isArray(packageJson.os)) {
       const supportedOS = packageJson.os;
-      const requiredOS = ['darwin', 'win32', 'linux'];
+      const requiredOS: string[] = ['darwin', 'win32', 'linux'];
       
       for (const os of requiredOS) {
         if (supportedOS.includes(os)) {
@@ -339,7 +378,7 @@ function testPlatformSupport() {
     // Check supported architectures
     if (packageJson.cpu && Array.isArray(packageJson.cpu)) {
       const supportedCPU = packageJson.cpu;
-      const requiredCPU = ['x64', 'arm64'];
+      const requiredCPU: string[] = ['x64', 'arm64'];
       
       for (const cpu of requiredCPU) {
         if (supportedCPU.includes(cpu)) {
@@ -354,8 +393,61 @@ function testPlatformSupport() {
   }
 }
 
+// Test 8: TypeScript compatibility
+function testTypeScriptCompatibility(): void {
+  log('Testing TypeScript compatibility...');
+  
+  const tsConfigPath = path.join(__dirname, '..', 'tsconfig.json');
+  
+  if (fs.existsSync(tsConfigPath)) {
+    try {
+      const content = fs.readFileSync(tsConfigPath, 'utf8');
+      const tsConfig = JSON.parse(content);
+      
+      // Check for essential TypeScript compiler options
+      const compilerOptions = tsConfig.compilerOptions;
+      if (compilerOptions) {
+        // Check target
+        if (compilerOptions.target) {
+          addTestResult('TypeScript target defined', true);
+        } else {
+          addTestResult('TypeScript target defined', false, 'target not specified');
+        }
+        
+        // Check module system
+        if (compilerOptions.module) {
+          addTestResult('TypeScript module system defined', true);
+        } else {
+          addTestResult('TypeScript module system defined', false, 'module not specified');
+        }
+        
+        // Check declaration files
+        if (compilerOptions.declaration) {
+          addTestResult('TypeScript declaration files enabled', true);
+        } else {
+          addTestResult('TypeScript declaration files enabled', false, 'declaration not enabled');
+        }
+        
+        // Check output directory
+        if (compilerOptions.outDir) {
+          addTestResult('TypeScript output directory defined', true);
+        } else {
+          addTestResult('TypeScript output directory defined', false, 'outDir not specified');
+        }
+      } else {
+        addTestResult('TypeScript compiler options exist', false, 'compilerOptions missing');
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      addTestResult('TypeScript config is valid JSON', false, errorMessage);
+    }
+  } else {
+    addTestResult('TypeScript config exists', false, 'tsconfig.json not found');
+  }
+}
+
 // Main test runner
-function runAllTests() {
+function runAllTests(): void {
   log('Starting generic integration tests...', 'info');
   log('=====================================', 'info');
   
@@ -367,6 +459,7 @@ function runAllTests() {
   testExamples();
   testIntegrationScenarios();
   testPlatformSupport();
+  testTypeScriptCompatibility();
   
   // Print results
   log('=====================================', 'info');
@@ -386,12 +479,16 @@ function runAllTests() {
   process.exit(testResults.failed === 0 ? 0 : 1);
 }
 
+// Export for module usage
+export {
+  runAllTests,
+  testResults,
+  TestConfig,
+  TestResult,
+  TestResults
+};
+
 // Run tests if this file is executed directly
 if (require.main === module) {
   runAllTests();
-}
-
-module.exports = {
-  runAllTests,
-  testResults
-}; 
+} 

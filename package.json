@@ -1,7 +1,7 @@
 {
-  "name": "electron-audio-screenshot",
+  "name": "electron-audio-screenshot-kit-kit",
   "version": "1.0.0",
-  "description": "Cross-platform audio capture for Electron apps with platform-specific permission handling",
+  "description": "Cross-platform audio and screenshot capture for Electron apps with platform-specific permission handling",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -16,8 +16,8 @@
     "prepublishOnly": "npm run build",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:basic": "node test-runner.js",
-    "test:integration": "node integration-tests/generic-integration.test.js",
+    "test:basic": "ts-node test-runner.ts",
+    "test:integration": "ts-node integration-tests/generic-integration.test.ts",
     "lint": "eslint src/**/*.ts",
     "format": "prettier --write src/**/*.ts",
     "clean": "rimraf dist"
@@ -40,17 +40,17 @@
   ],
   "author": {
     "name": "Electron Platform Audio Team",
-    "email": "support@electron-audio-screenshot.com"
+    "email": "support@electron-audio-screenshot-kit.com"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vbrazo/electron-audio-screenshot.git"
+    "url": "https://github.com/vbrazo/electron-audio-screenshot-kit.git"
   },
   "bugs": {
-    "url": "https://github.com/electron-audio-screenshot/electron-audio-screenshot/issues"
+    "url": "https://github.com/electron-audio-screenshot-kit/electron-audio-screenshot-kit/issues"
   },
-  "homepage": "https://github.com/electron-audio-screenshot/electron-audio-screenshot#readme",
+  "homepage": "https://github.com/electron-audio-screenshot-kit/electron-audio-screenshot-kit#readme",
   "peerDependencies": {
     "electron": ">=20.0.0"
   },
@@ -58,9 +58,9 @@
     "sharp": "^0.34.2"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
     "@types/electron": "^1.6.10",
     "@types/jest": "^29.0.0",
+    "@types/node": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.0.0",
@@ -68,6 +68,7 @@
     "prettier": "^3.0.0",
     "rimraf": "^5.0.0",
     "ts-jest": "^29.0.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.0.0"
   },
   "engines": {
@@ -82,4 +83,4 @@
     "x64",
     "arm64"
   ]
-} 
+}

@@ -1,9 +1,9 @@
 // ============================================================================
 // GENERIC ELECTRON APP INTEGRATION EXAMPLE
 // ============================================================================
-// This example shows how to integrate electron-audio-screenshot into any Electron app
+// This example shows how to integrate electron-audio-screenshot-kit into any Electron app
 
-import { audioScreenshotService } from 'electron-audio-screenshot';
+import { audioScreenshotService } from 'electron-audio-screenshot-kit';
 import { app, ipcMain } from 'electron';
 
 // ============================================================================
@@ -69,7 +69,7 @@ class GenericAudioIntegration {
 // RENDERER PROCESS INTEGRATION
 // ============================================================================
 
-import { PlatformAudioCapture, PlatformPermissionChecker } from 'electron-audio-screenshot';
+import { PlatformAudioCapture, PlatformPermissionChecker } from 'electron-audio-screenshot-kit';
 
 // Generic audio capture class (for non-React apps)
 export class GenericAudioCapture {
@@ -176,7 +176,7 @@ Add to your package.json:
 
 {
   "dependencies": {
-    "electron-audio-screenshot": "^1.0.0",
+    "electron-audio-screenshot-kit": "^1.0.0",
     "sharp": "^0.34.2"
   },
   "peerDependencies": {
@@ -213,7 +213,7 @@ export function basicUsageExample() {
 /*
 // In your React component file (e.g., AudioRecorder.tsx):
 import React, { useState, useEffect } from 'react';
-import { PlatformAudioCapture, PlatformPermissionChecker } from 'electron-audio-screenshot';
+import { PlatformAudioCapture, PlatformPermissionChecker } from 'electron-audio-screenshot-kit';
 
 export function AudioRecorder() {
   const [isRecording, setIsRecording] = useState(false);

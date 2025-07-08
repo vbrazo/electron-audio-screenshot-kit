@@ -1,10 +1,10 @@
 // ============================================================================
 // REACT INTEGRATION EXAMPLE
 // ============================================================================
-// This example shows how to integrate electron-audio-screenshot with React
+// This example shows how to integrate electron-audio-screenshot-kit with React
 
 import React, { useState, useEffect } from 'react';
-import { PlatformAudioCapture, PlatformPermissionChecker, AudioCaptureUI } from 'electron-audio-screenshot';
+import { PlatformAudioCapture, PlatformPermissionChecker, AudioCaptureUI } from 'electron-audio-screenshot-kit';
 
 // ============================================================================
 // BASIC AUDIO RECORDER COMPONENT
