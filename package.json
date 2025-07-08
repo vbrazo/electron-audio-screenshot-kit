@@ -1,0 +1,85 @@
+{
+  "name": "electron-platform-audio-screenshot",
+  "version": "1.0.0",
+  "description": "Cross-platform audio capture for Electron apps with platform-specific permission handling",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "assets/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "prepublishOnly": "npm run build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:basic": "node test-runner.js",
+    "test:integration": "node integration-tests/generic-integration.test.js",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write src/**/*.ts",
+    "clean": "rimraf dist"
+  },
+  "keywords": [
+    "electron",
+    "audio",
+    "capture",
+    "microphone",
+    "system-audio",
+    "cross-platform",
+    "permissions",
+    "macos",
+    "windows",
+    "linux",
+    "echo-cancellation",
+    "screenshot",
+    "desktop-app",
+    "media-capture"
+  ],
+  "author": {
+    "name": "Electron Platform Audio Team",
+    "email": "support@electron-platform-audio-screenshot.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/electron-platform-audio-screenshot/electron-platform-audio-screenshot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/electron-platform-audio-screenshot/electron-platform-audio-screenshot/issues"
+  },
+  "homepage": "https://github.com/electron-platform-audio-screenshot/electron-platform-audio-screenshot#readme",
+  "peerDependencies": {
+    "electron": ">=20.0.0"
+  },
+  "dependencies": {
+    "sharp": "^0.34.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/electron": "^1.6.10",
+    "@types/jest": "^29.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "jest": "^29.0.0",
+    "prettier": "^3.0.0",
+    "rimraf": "^5.0.0",
+    "ts-jest": "^29.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "os": [
+    "darwin",
+    "win32",
+    "linux"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ]
+} 
