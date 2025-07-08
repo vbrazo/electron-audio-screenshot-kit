@@ -1,5 +1,3 @@
-// Mock Electron module for testing
-
 export const ipcMain = {
   handle: jest.fn(),
 };
@@ -22,7 +20,6 @@ export const systemPreferences = {
   askForMediaAccess: jest.fn(),
 };
 
-// Mock other Electron modules as needed
 export const app = {
   whenReady: jest.fn(),
   on: jest.fn(),
@@ -298,4 +295,4 @@ export default {
   TouchBarSegmentedControl,
   TouchBarSlider,
   TouchBarSpacer,
-}; 
+};

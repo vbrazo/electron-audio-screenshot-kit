@@ -1,7 +1,3 @@
-// ============================================================================
-// ELECTRON PLATFORM AUDIO - TYPES AND INTERFACES
-// ============================================================================
-
 export interface AudioCaptureConfig {
   sampleRate: number;
   channels: number;
@@ -114,10 +110,6 @@ export interface AudioCaptureCallbacks {
   onStateChange?: (state: AudioCaptureState) => void;
 }
 
-// ============================================================================
-// PLATFORM-SPECIFIC TYPES
-// ============================================================================
-
 export interface MacOSAudioConfig extends AudioCaptureConfig {
   systemAudioDumpPath?: string;
   useCoreAudio: boolean;
@@ -134,19 +126,11 @@ export interface LinuxAudioConfig extends AudioCaptureConfig {
   soxPath?: string;
 }
 
-// ============================================================================
-// UTILITY TYPES
-// ============================================================================
-
 export type Platform = 'macos' | 'windows' | 'linux';
 export type ScreenshotQuality = 'low' | 'medium' | 'high';
 export type EchoCancellationSensitivity = 'low' | 'medium' | 'high';
 export type AudioFormat = 'wav' | 'mp3' | 'ogg' | 'webm';
 export type PermissionType = 'microphone' | 'screen' | 'both';
-
-// ============================================================================
-// ERROR TYPES
-// ============================================================================
 
 export class PlatformAudioError extends Error {
   constructor(
@@ -179,4 +163,4 @@ export class SystemAudioError extends PlatformAudioError {
     super(message, 'SYSTEM_AUDIO_ERROR', platform);
     this.name = 'SystemAudioError';
   }
-} 
+}

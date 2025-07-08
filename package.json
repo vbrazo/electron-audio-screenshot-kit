@@ -1,5 +1,5 @@
 {
-  "name": "electron-audio-screenshot-kit-kit",
+  "name": "electron-audio-screenshot-kit",
   "version": "1.0.0",
   "description": "Cross-platform audio and screenshot capture for Electron apps with platform-specific permission handling",
   "main": "dist/index.js",

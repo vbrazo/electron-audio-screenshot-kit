@@ -97,7 +97,7 @@ describe('Types and Constants', () => {
     it('should have correct Linux configuration', () => {
       const linuxConfig = AUDIO_CONFIGS.linux;
       expect(linuxConfig.sampleRate).toBe(24000);
-      expect(linuxConfig.enableEchoCancellation).toBe(false); // Limited support
+      expect(linuxConfig.enableEchoCancellation).toBe(false);
       expect(linuxConfig.echoCancellationSensitivity).toBe('low');
     });
   });
@@ -139,4 +139,4 @@ describe('Types and Constants', () => {
       expect(error.name).toBe('SystemAudioError');
     });
   });
-}); 
+});

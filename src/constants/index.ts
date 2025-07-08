@@ -1,7 +1,3 @@
-// ============================================================================
-// ELECTRON PLATFORM AUDIO - CONSTANTS
-// ============================================================================
-
 import { AudioCaptureConfig, ScreenshotQuality, Platform } from '../types';
 
 export const PLATFORMS = {
@@ -104,10 +100,10 @@ export const FILE_EXTENSIONS = {
 } as const;
 
 export const DEFAULT_TIMEOUTS = {
-  PERMISSION_REQUEST: 30000, // 30 seconds
-  AUDIO_CAPTURE_START: 10000, // 10 seconds
-  SCREENSHOT_CAPTURE: 5000, // 5 seconds
-  BINARY_EXECUTION: 15000, // 15 seconds
+  PERMISSION_REQUEST: 30000,
+  AUDIO_CAPTURE_START: 10000,
+  SCREENSHOT_CAPTURE: 5000,
+  BINARY_EXECUTION: 15000,
 } as const;
 
 export const CHUNK_SIZES = {
@@ -142,7 +138,7 @@ export const ECHO_CANCELLATION = {
     },
   },
   BUFFER_SIZE: 10,
-  MAX_DELAY: 500, // ms
+  MAX_DELAY: 500,
 } as const;
 
 export const PLATFORM_CAPABILITIES = {
@@ -197,4 +193,4 @@ export const LOG_PREFIXES = {
   PERMISSION: '[Permission]',
   SCREENSHOT: '[Screenshot]',
   PLATFORM: '[Platform]',
-} as const; 
+} as const;

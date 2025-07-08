@@ -29,10 +29,6 @@ import {
 
 const execFileAsync = promisify(execFile);
 
-// ============================================================================
-// PLATFORM AUDIO SERVICE (MAIN PROCESS)
-// ============================================================================
-
 export class audioScreenshotService {
   private isCapturing: boolean = false;
   private systemAudioProc: any = null;
@@ -40,7 +36,6 @@ export class audioScreenshotService {
   private screenshotInterval: NodeJS.Timeout | null = null;
   private config: AudioCaptureConfig;
   
-  // Platform detection
   private readonly platform: Platform;
   private readonly isMacOS = process.platform === 'darwin';
   private readonly isWindows = process.platform === 'win32';
@@ -53,10 +48,6 @@ export class audioScreenshotService {
     console.log(`${LOG_PREFIXES.MAIN} audioScreenshotService initialized for ${this.platform}`);
   }
 
-  // ============================================================================
-  // PUBLIC METHODS
-  // ============================================================================
-
   async checkSystemPermissions(): Promise<PermissionStatus> {
     try {
       console.log(`${LOG_PREFIXES.PERMISSION} Checking system permissions...`);
@@ -66,12 +57,10 @@ export class audioScreenshotService {
       let needsSetup = false;
 
       if (this.isMacOS) {
-        // macOS specific permission checks
         try {
           const micStatus = systemPreferences.getMediaAccessStatus('microphone');
           microphone = micStatus as PermissionStatus['microphone'];
           
-          // For screen recording, we need to trigger a capture request to register the app
           try {
             await desktopCapturer.getSources({ 
               types: ['screen'], 
@@ -88,13 +77,11 @@ export class audioScreenshotService {
           needsSetup = true;
         }
       } else if (this.isWindows) {
-        // Windows uses standard browser permissions
-        microphone = 'granted'; // Will be checked via getUserMedia
-        screen = 'granted'; // Will be checked via getDisplayMedia
+        microphone = 'granted';
+        screen = 'granted';
       } else if (this.isLinux) {
-        // Linux uses standard browser permissions
-        microphone = 'granted'; // Will be checked via getUserMedia
-        screen = 'granted'; // Will be checked via getDisplayMedia
+        microphone = 'granted';
+        screen = 'granted';
       }
 
       const status: PermissionStatus = {
@@ -127,7 +114,6 @@ export class audioScreenshotService {
         return { success: true, status: 'granted' };
       }
 
-      // Request microphone permission
       const granted = await systemPreferences.askForMediaAccess('microphone');
       return { 
         success: granted, 
@@ -150,7 +136,6 @@ export class audioScreenshotService {
 
     try {
       if (section === 'screen-recording') {
-        // First trigger screen capture request to register the app in system preferences
         try {
           console.log(`${LOG_PREFIXES.PERMISSION} Triggering screen capture request to register app...`);
           await desktopCapturer.getSources({ 
@@ -182,7 +167,6 @@ export class audioScreenshotService {
 
       console.log(`${LOG_PREFIXES.AUDIO} Starting platform-specific audio capture...`);
       
-      // Check permissions first
       const permissions = await this.checkSystemPermissions();
       if (permissions.needsSetup) {
         throw new PermissionError(
@@ -227,7 +211,6 @@ export class audioScreenshotService {
 
       console.log(`${LOG_PREFIXES.AUDIO} Stopping platform audio capture...`);
 
-      // Stop platform-specific capture
       if (this.isMacOS) {
         await this.stopMacOSAudioCapture();
       } else if (this.isWindows) {
@@ -236,7 +219,6 @@ export class audioScreenshotService {
         await this.stopLinuxAudioCapture();
       }
 
-      // Stop screenshot capture
       if (this.screenshotInterval) {
         clearInterval(this.screenshotInterval);
         this.screenshotInterval = null;
@@ -284,17 +266,11 @@ export class audioScreenshotService {
     console.log(`${LOG_PREFIXES.AUDIO} Configuration updated:`, this.config);
   }
 
-  // ============================================================================
-  // PRIVATE METHODS - PLATFORM-SPECIFIC AUDIO CAPTURE
-  // ============================================================================
-
   private async startMacOSAudioCapture(): Promise<void> {
     console.log(`${LOG_PREFIXES.AUDIO} Starting macOS audio capture...`);
     
-    // Kill any existing SystemAudioDump processes
     await this.killExistingSystemAudioDump();
     
-    // Start SystemAudioDump for system audio capture
     const { app } = require('electron');
     const systemAudioPath = app.isPackaged
       ? path.join(process.resourcesPath, 'app.asar.unpacked', 'assets', 'SystemAudioDump')
@@ -302,7 +278,6 @@ export class audioScreenshotService {
 
     console.log(`${LOG_PREFIXES.AUDIO} SystemAudioDump path:`, systemAudioPath);
 
-    // Check if binary exists
     if (!fs.existsSync(systemAudioPath)) {
       throw new SystemAudioError(
         `SystemAudioDump binary not found at ${systemAudioPath}`,
@@ -320,7 +295,6 @@ export class audioScreenshotService {
 
     console.log(`${LOG_PREFIXES.AUDIO} SystemAudioDump started with PID:`, this.systemAudioProc.pid);
 
-    // Set up audio processing
     const CHUNK_DURATION = this.config.chunkDuration;
     const SAMPLE_RATE = this.config.sampleRate;
     const BYTES_PER_SAMPLE = this.config.bitsPerSample / 8;
@@ -367,17 +341,11 @@ export class audioScreenshotService {
 
   private async startWindowsAudioCapture(): Promise<void> {
     console.log(`${LOG_PREFIXES.AUDIO} Starting Windows audio capture...`);
-    
-    // Windows audio capture is handled in the renderer process
-    // The main process coordinates the capture
     console.log(`${LOG_PREFIXES.AUDIO} Windows audio capture will be handled in renderer process`);
   }
 
   private async startLinuxAudioCapture(): Promise<void> {
     console.log(`${LOG_PREFIXES.AUDIO} Starting Linux audio capture...`);
-    
-    // Linux audio capture is handled in the renderer process
-    // Limited system audio support on Linux
     console.log(`${LOG_PREFIXES.AUDIO} Linux audio capture will be handled in renderer process`);
   }
 
@@ -391,12 +359,10 @@ export class audioScreenshotService {
 
   private async stopWindowsAudioCapture(): Promise<void> {
     console.log(`${LOG_PREFIXES.AUDIO} Stopping Windows audio capture...`);
-    // Cleanup handled in renderer
   }
 
   private async stopLinuxAudioCapture(): Promise<void> {
     console.log(`${LOG_PREFIXES.AUDIO} Stopping Linux audio capture...`);
-    // Cleanup handled in renderer
   }
 
   private async killExistingSystemAudioDump(): Promise<void> {
@@ -428,10 +394,6 @@ export class audioScreenshotService {
     });
   }
 
-  // ============================================================================
-  // PRIVATE METHODS - SCREENSHOT CAPTURE
-  // ============================================================================
-
   private async captureMacOSScreenshot(options: ScreenshotOptions): Promise<ScreenshotResult> {
     try {
       const tempPath = path.join(os.tmpdir(), `screenshot-${Date.now()}.jpg`);
@@ -442,7 +404,6 @@ export class audioScreenshotService {
       const imageBuffer = await fs.promises.readFile(tempPath);
       await fs.promises.unlink(tempPath);
 
-      // Resize image for efficiency
       const sharp = require('sharp');
       const resizedBuffer = await sharp(imageBuffer)
         .resize({ height: config.height })
@@ -507,15 +468,11 @@ export class audioScreenshotService {
     }
   }
 
-  // ============================================================================
-  // PRIVATE METHODS - UTILITY FUNCTIONS
-  // ============================================================================
-
   private detectPlatform(): Platform {
     if (this.isMacOS) return PLATFORMS.MACOS;
     if (this.isWindows) return PLATFORMS.WINDOWS;
     if (this.isLinux) return PLATFORMS.LINUX;
-    return PLATFORMS.WINDOWS; // fallback
+    return PLATFORMS.WINDOWS;
   }
 
   private convertStereoToMono(buffer: Buffer): Buffer {
@@ -530,10 +487,6 @@ export class audioScreenshotService {
     
     return Buffer.from(monoArray.buffer);
   }
-
-  // ============================================================================
-  // IPC HANDLERS SETUP
-  // ============================================================================
 
   setupIpcHandlers(): void {
     ipcMain.handle('platform-audio:check-permissions', async () => {

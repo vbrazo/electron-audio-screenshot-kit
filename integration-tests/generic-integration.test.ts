@@ -1,12 +1,6 @@
-// ============================================================================
-// GENERIC INTEGRATION TESTS (TypeScript)
-// ============================================================================
-// These tests verify that electron-audio-screenshot-kit integrates correctly with any Electron app
-
 import fs from 'fs';
 import path from 'path';
 
-// Types
 interface TestConfig {
   packageName: string;
   version: string;
@@ -37,7 +31,6 @@ interface PackageJson {
   cpu?: string[];
 }
 
-// Test configuration
 const TEST_CONFIG: TestConfig = {
   packageName: 'electron-audio-screenshot-kit',
   version: '1.0.0',
@@ -55,7 +48,6 @@ const TEST_CONFIG: TestConfig = {
   ]
 };
 
-// Test results
 let testResults: TestResults = {
   passed: 0,
   failed: 0,
@@ -63,7 +55,6 @@ let testResults: TestResults = {
   details: []
 };
 
-// Utility functions
 function log(message: string, type: 'info' | 'error' | 'success' = 'info'): void {
   const timestamp = new Date().toISOString();
   const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️';
@@ -82,21 +73,18 @@ function addTestResult(testName: string, passed: boolean, details: string = ''):
   testResults.details.push({ testName, passed, details });
 }
 
-// Test 1: Package structure validation
 function testPackageStructure(): boolean {
   log('Testing package structure...');
   
   const packagePath = path.join(__dirname, '..');
   const packageJsonPath = path.join(packagePath, 'package.json');
   
-  // Check if package.json exists
   if (!fs.existsSync(packageJsonPath)) {
     addTestResult('Package.json exists', false, 'package.json not found');
     return false;
   }
   addTestResult('Package.json exists', true);
   
-  // Parse package.json
   let packageJson: PackageJson;
   try {
     const content = fs.readFileSync(packageJsonPath, 'utf8');
@@ -108,35 +96,30 @@ function testPackageStructure(): boolean {
   }
   addTestResult('Package.json is valid JSON', true);
   
-  // Check package name
   if (packageJson.name !== TEST_CONFIG.packageName) {
     addTestResult('Package name is correct', false, `Expected ${TEST_CONFIG.packageName}, got ${packageJson.name}`);
   } else {
     addTestResult('Package name is correct', true);
   }
   
-  // Check version
   if (packageJson.version !== TEST_CONFIG.version) {
     addTestResult('Package version is correct', false, `Expected ${TEST_CONFIG.version}, got ${packageJson.version}`);
   } else {
     addTestResult('Package version is correct', true);
   }
   
-  // Check main entry point
   if (!packageJson.main) {
     addTestResult('Main entry point defined', false, 'main field missing');
   } else {
     addTestResult('Main entry point defined', true);
   }
   
-  // Check TypeScript types
   if (!packageJson.types) {
     addTestResult('TypeScript types defined', false, 'types field missing');
   } else {
     addTestResult('TypeScript types defined', true);
   }
   
-  // Check peer dependencies
   if (!packageJson.peerDependencies?.['electron']) {
     addTestResult('Electron peer dependency', false, 'electron peer dependency missing');
   } else {
@@ -146,7 +129,6 @@ function testPackageStructure(): boolean {
   return true;
 }
 
-// Test 2: Required files validation
 function testRequiredFiles(): void {
   log('Testing required files...');
   
@@ -162,7 +144,6 @@ function testRequiredFiles(): void {
   }
 }
 
-// Test 3: Build output validation
 function testBuildOutput(): boolean {
   log('Testing build output...');
   
@@ -174,7 +155,6 @@ function testBuildOutput(): boolean {
   }
   addTestResult('Dist directory exists', true);
   
-  // Check main JavaScript file
   const mainJsPath = path.join(distPath, 'index.js');
   if (fs.existsSync(mainJsPath)) {
     const content = fs.readFileSync(mainJsPath, 'utf8');
@@ -186,8 +166,7 @@ function testBuildOutput(): boolean {
   } else {
     addTestResult('Main JS file exists', false, 'index.js not found in dist');
   }
-  
-  // Check TypeScript definitions
+
   const mainDtsPath = path.join(distPath, 'index.d.ts');
   if (fs.existsSync(mainDtsPath)) {
     const content = fs.readFileSync(mainDtsPath, 'utf8');
@@ -203,7 +182,6 @@ function testBuildOutput(): boolean {
   return true;
 }
 
-// Test 4: Documentation validation
 function testDocumentation(): void {
   log('Testing documentation...');
   
@@ -212,7 +190,6 @@ function testDocumentation(): void {
   if (fs.existsSync(readmePath)) {
     const content = fs.readFileSync(readmePath, 'utf8');
     
-    // Check for key sections
     const requiredSections: string[] = [
       '# electron-audio-screenshot-kit',
       '## 🛠️ Installation',
@@ -228,14 +205,12 @@ function testDocumentation(): void {
       }
     }
     
-    // Check for installation instructions
     if (content.includes('npm install')) {
       addTestResult('README contains installation instructions', true);
     } else {
       addTestResult('README contains installation instructions', false, 'npm install instructions not found');
     }
     
-    // Check for usage examples
     if (content.includes('import') && content.includes('audioScreenshotService')) {
       addTestResult('README contains usage examples', true);
     } else {
@@ -246,7 +221,6 @@ function testDocumentation(): void {
   }
 }
 
-// Test 5: Examples validation
 function testExamples(): void {
   log('Testing examples...');
   
@@ -255,7 +229,6 @@ function testExamples(): void {
   if (fs.existsSync(examplesPath)) {
     const files = fs.readdirSync(examplesPath);
     
-    // Check for generic integration example
     const genericExample = files.find(file => file.includes('generic'));
     if (genericExample) {
       addTestResult('Generic integration example exists', true);
@@ -263,7 +236,6 @@ function testExamples(): void {
       addTestResult('Generic integration example exists', false, 'No generic integration example found');
     }
     
-    // Check for React integration example
     const reactExample = files.find(file => file.includes('react'));
     if (reactExample) {
       addTestResult('React integration example exists', true);
@@ -275,71 +247,67 @@ function testExamples(): void {
   }
 }
 
-// Test 6: Integration scenarios
 function testIntegrationScenarios(): void {
   log('Testing integration scenarios...');
   
-  // Test 1: Basic Electron app integration
   const basicIntegration = `
-import { audioScreenshotService } from 'electron-audio-screenshot-kit';
-import { app, ipcMain } from 'electron';
+  import { audioScreenshotService } from 'electron-audio-screenshot-kit';
+  import { app, ipcMain } from 'electron';
 
-class MyApp {
-  private audioScreenshotService: audioScreenshotService;
+  class MyApp {
+    private audioScreenshotService: audioScreenshotService;
 
-  constructor() {
-    this.audioScreenshotService = new audioScreenshotService({
-      sampleRate: 24000,
-      chunkDuration: 0.1,
-      enableEchoCancellation: true,
-    });
-  }
-
-  setupIpcHandlers(): void {
-    this.audioScreenshotService.setupIpcHandlers();
-  }
-}
-`;
-  
-  // Check if the integration code would work (basic syntax check)
-  if (basicIntegration.includes('audioScreenshotService') && 
-      basicIntegration.includes('setupIpcHandlers')) {
-    addTestResult('Basic integration scenario', true);
-  } else {
-    addTestResult('Basic integration scenario', false, 'Basic integration code incomplete');
-  }
-  
-  // Test 2: React component integration
-  const reactIntegration = `
-import React, { useState } from 'react';
-import { PlatformAudioCapture, PlatformPermissionChecker } from 'electron-audio-screenshot-kit';
-
-interface AudioRecorderProps {
-  onRecordingComplete?: (chunks: any[]) => void;
-}
-
-export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps): JSX.Element {
-  const [isRecording, setIsRecording] = useState<boolean>(false);
-  const audioCapture = new PlatformAudioCapture();
-  
-  const startRecording = async (): Promise<void> => {
-    const result = await audioCapture.startCapture(5, 'medium');
-    if (result.success) {
-      setIsRecording(true);
+    constructor() {
+      this.audioScreenshotService = new audioScreenshotService({
+        sampleRate: 24000,
+        chunkDuration: 0.1,
+        enableEchoCancellation: true,
+      });
     }
-  };
-  
-  return (
-    <div>
-      <PlatformPermissionChecker
-        onPermissionsReady={() => console.log('Ready')}
-        onPermissionsError={(error: Error) => console.error(error)}
-      />
-      <button onClick={startRecording}>Start Recording</button>
-    </div>
-  );
-}
-`;
+
+    setupIpcHandlers(): void {
+      this.audioScreenshotService.setupIpcHandlers();
+    }
+  }
+  `;
+    
+    if (basicIntegration.includes('audioScreenshotService') && 
+        basicIntegration.includes('setupIpcHandlers')) {
+      addTestResult('Basic integration scenario', true);
+    } else {
+      addTestResult('Basic integration scenario', false, 'Basic integration code incomplete');
+    }
+    
+    const reactIntegration = `
+    import React, { useState } from 'react';
+    import { PlatformAudioCapture, PlatformPermissionChecker } from 'electron-audio-screenshot-kit';
+
+    interface AudioRecorderProps {
+      onRecordingComplete?: (chunks: any[]) => void;
+    }
+
+    export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps): JSX.Element {
+      const [isRecording, setIsRecording] = useState<boolean>(false);
+      const audioCapture = new PlatformAudioCapture();
+      
+      const startRecording = async (): Promise<void> => {
+        const result = await audioCapture.startCapture(5, 'medium');
+        if (result.success) {
+          setIsRecording(true);
+        }
+      };
+      
+      return (
+        <div>
+          <PlatformPermissionChecker
+            onPermissionsReady={() => console.log('Ready')}
+            onPermissionsError={(error: Error) => console.error(error)}
+          />
+          <button onClick={startRecording}>Start Recording</button>
+        </div>
+      );
+    }
+  `;
   
   if (reactIntegration.includes('PlatformAudioCapture') && 
       reactIntegration.includes('PlatformPermissionChecker')) {
@@ -349,7 +317,6 @@ export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps): JSX.
   }
 }
 
-// Test 7: Platform support validation
 function testPlatformSupport(): void {
   log('Testing platform support...');
   
@@ -359,7 +326,6 @@ function testPlatformSupport(): void {
     const content = fs.readFileSync(packagePath, 'utf8');
     const packageJson = JSON.parse(content) as PackageJson;
     
-    // Check supported operating systems
     if (packageJson.os && Array.isArray(packageJson.os)) {
       const supportedOS = packageJson.os;
       const requiredOS: string[] = ['darwin', 'win32', 'linux'];
@@ -375,7 +341,6 @@ function testPlatformSupport(): void {
       addTestResult('OS support defined', false, 'os field missing or not an array');
     }
     
-    // Check supported architectures
     if (packageJson.cpu && Array.isArray(packageJson.cpu)) {
       const supportedCPU = packageJson.cpu;
       const requiredCPU: string[] = ['x64', 'arm64'];
@@ -393,7 +358,6 @@ function testPlatformSupport(): void {
   }
 }
 
-// Test 8: TypeScript compatibility
 function testTypeScriptCompatibility(): void {
   log('Testing TypeScript compatibility...');
   
@@ -404,31 +368,26 @@ function testTypeScriptCompatibility(): void {
       const content = fs.readFileSync(tsConfigPath, 'utf8');
       const tsConfig = JSON.parse(content);
       
-      // Check for essential TypeScript compiler options
       const compilerOptions = tsConfig.compilerOptions;
       if (compilerOptions) {
-        // Check target
         if (compilerOptions.target) {
           addTestResult('TypeScript target defined', true);
         } else {
           addTestResult('TypeScript target defined', false, 'target not specified');
         }
         
-        // Check module system
         if (compilerOptions.module) {
           addTestResult('TypeScript module system defined', true);
         } else {
           addTestResult('TypeScript module system defined', false, 'module not specified');
         }
         
-        // Check declaration files
         if (compilerOptions.declaration) {
           addTestResult('TypeScript declaration files enabled', true);
         } else {
           addTestResult('TypeScript declaration files enabled', false, 'declaration not enabled');
         }
         
-        // Check output directory
         if (compilerOptions.outDir) {
           addTestResult('TypeScript output directory defined', true);
         } else {
@@ -446,12 +405,10 @@ function testTypeScriptCompatibility(): void {
   }
 }
 
-// Main test runner
 function runAllTests(): void {
   log('Starting generic integration tests...', 'info');
   log('=====================================', 'info');
   
-  // Run all tests
   testPackageStructure();
   testRequiredFiles();
   testBuildOutput();
@@ -460,8 +417,7 @@ function runAllTests(): void {
   testIntegrationScenarios();
   testPlatformSupport();
   testTypeScriptCompatibility();
-  
-  // Print results
+
   log('=====================================', 'info');
   log(`Test Results: ${testResults.passed}/${testResults.total} passed`, 
       testResults.failed === 0 ? 'success' : 'error');
@@ -475,11 +431,9 @@ function runAllTests(): void {
       });
   }
   
-  // Exit with appropriate code
   process.exit(testResults.failed === 0 ? 0 : 1);
 }
 
-// Export for module usage
 export {
   runAllTests,
   testResults,
@@ -488,7 +442,6 @@ export {
   TestResults
 };
 
-// Run tests if this file is executed directly
 if (require.main === module) {
   runAllTests();
 } 

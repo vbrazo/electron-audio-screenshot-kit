@@ -1,5 +1,7 @@
 # electron-audio-screenshot-kit
 
+[![npm version](https://img.shields.io/npm/v/electron-audio-screenshot-kit.svg)](https://www.npmjs.com/package/electron-audio-screenshot-kit)
+
 A **completely generic, production-ready npm library** for Electron apps that enables cross-platform audio capture, permission handling, echo cancellation, and screenshot capture capabilities — with full TypeScript and React support.
 
 ---
@@ -29,7 +31,7 @@ A **universal, drop-in audio + screenshot solution** for any Electron app.
 npm install electron-audio-screenshot-kit
 ```
 
-> ⚠️ Requires `electron >=20.0.0` as a peer dependency.
+> ⚠️ Requires `electron >= 20.0.0` as a peer dependency.
 
 ---
 

@@ -2,7 +2,6 @@ import { audioScreenshotService } from '../main/audioScreenshotService';
 import { AudioCaptureConfig } from '../types';
 import { AUDIO_CONFIGS, PLATFORMS } from '../constants';
 
-// Mock Electron modules
 jest.mock('electron', () => ({
   ipcMain: {
     handle: jest.fn(),
@@ -31,7 +30,6 @@ jest.mock('electron', () => ({
   },
 }));
 
-// Mock Node.js modules
 jest.mock('child_process', () => ({
   spawn: jest.fn(),
   execFile: jest.fn(),
@@ -57,7 +55,6 @@ jest.mock('util', () => ({
   promisify: jest.fn((fn) => fn),
 }));
 
-// Mock sharp
 jest.mock('sharp', () => {
   return jest.fn(() => ({
     resize: jest.fn().mockReturnThis(),
@@ -76,12 +73,10 @@ describe('audioScreenshotService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     
-    // Setup mocks
     mockSpawn = require('child_process').spawn;
     mockFs = require('fs');
     mockExecFile = require('child_process').execFile;
 
-    // Mock process.platform
     Object.defineProperty(process, 'platform', {
       value: 'darwin',
       writable: true,
@@ -107,7 +102,7 @@ describe('audioScreenshotService', () => {
 
       expect(config.sampleRate).toBe(48000);
       expect(config.chunkDuration).toBe(0.05);
-      expect(config.channels).toBe(AUDIO_CONFIGS.macos.channels); // Should merge with defaults
+      expect(config.channels).toBe(AUDIO_CONFIGS.macos.channels);
     });
 
     it('should detect Windows platform correctly', () => {
@@ -259,7 +254,6 @@ describe('audioScreenshotService', () => {
       desktopCapturer.getSources.mockResolvedValue([{ id: 'screen:0' }]);
       mockFs.existsSync.mockReturnValue(true);
       
-      // Mock spawn to return a process with kill method and pid
       const mockProcess = {
         kill: jest.fn(),
         on: jest.fn(),
@@ -272,7 +266,7 @@ describe('audioScreenshotService', () => {
       const result = await service.startAudioCapture();
 
       expect(result).toEqual({ success: true });
-    }, 15000); // Increase timeout
+    }, 15000);
 
     it('should handle missing SystemAudioDump binary', async () => {
       const { systemPreferences, desktopCapturer } = require('electron');
@@ -284,7 +278,7 @@ describe('audioScreenshotService', () => {
       await expect(service.startAudioCapture()).rejects.toThrow(
         'SystemAudioDump binary not found'
       );
-    }, 15000); // Increase timeout
+    }, 15000);
 
     it('should handle permission errors', async () => {
       const { systemPreferences, desktopCapturer } = require('electron');
@@ -324,7 +318,6 @@ describe('audioScreenshotService', () => {
       desktopCapturer.getSources.mockResolvedValue([{ id: 'screen:0' }]);
       mockFs.existsSync.mockReturnValue(true);
       
-      // Mock spawn to return a process with kill method and pid
       const mockProcess = {
         kill: jest.fn(),
         on: jest.fn(),
@@ -455,4 +448,4 @@ describe('audioScreenshotService', () => {
       );
     });
   });
-}); 
+});
