@@ -1,7 +1,5 @@
 # electron-audio-shot
 
-[![npm version](https://img.shields.io/npm/v/electron-audio-shot.svg)](https://www.npmjs.com/package/electron-audio-shot)
-
 A **completely generic, production-ready npm library** for Electron apps that enables cross-platform audio capture, permission handling, echo cancellation, and screenshot capture capabilities — with full TypeScript and React support.
 
 ---
